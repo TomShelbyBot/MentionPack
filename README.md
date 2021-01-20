@@ -1,4 +1,4 @@
-#MentionPack
+# MentionPack
 Pack that helps you to manage local groups inside your chat and mention them
 
 ## Features
