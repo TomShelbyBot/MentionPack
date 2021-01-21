@@ -1,9 +1,6 @@
 package me.theseems.tomshelby.mentionpack
 
-import me.theseems.tomshelby.mentionpack.commands.AddGroupBotCommand
-import me.theseems.tomshelby.mentionpack.commands.DeleteGroupBotCommand
-import me.theseems.tomshelby.mentionpack.commands.ListGroupBotCommand
-import me.theseems.tomshelby.mentionpack.commands.MentionGroupBotCommand
+import me.theseems.tomshelby.mentionpack.commands.*
 import me.theseems.tomshelby.mentionpack.handlers.MessageMentionHandler
 import me.theseems.tomshelby.pack.JavaBotPackage
 
@@ -15,6 +12,7 @@ open class MentionBotPackage : JavaBotPackage() {
         bot.commandContainer.attach(AddGroupBotCommand())
         bot.commandContainer.attach(ListGroupBotCommand())
         bot.commandContainer.attach(DeleteGroupBotCommand())
+        bot.commandContainer.attach(RemoveGroupBotCommand())
 
         mentionHandler = MessageMentionHandler()
         bot.updateHandlerManager.addUpdateHandler(mentionHandler)
@@ -26,5 +24,6 @@ open class MentionBotPackage : JavaBotPackage() {
         bot.commandContainer.detach("mglist")
         bot.commandContainer.detach("mgadd")
         bot.commandContainer.detach("mgdel")
+        bot.commandContainer.detach("mgrem")
     }
 }

@@ -24,40 +24,37 @@ fun ChatMember.stringInfo(withTitle: Boolean = false): String {
     val infoParts = mutableListOf<String>()
 
     var currentState = Info.USERNAME
-    while (true) {
-        when (currentState) {
+    while (true) when (currentState) {
+        Info.USERNAME -> {
+            val hasUsername = user.userName != null
+            if (hasUsername)
+                infoParts.add(user.userName)
 
-            Info.USERNAME -> {
-                val hasUsername = user.userName != null
-                if (hasUsername)
-                    infoParts.add(user.userName)
+            currentState = if (hasUsername) Info.END else Info.FIRST_NAME
+        }
 
-                currentState = if (hasUsername) Info.END else Info.FIRST_NAME
-            }
+        Info.FIRST_NAME -> {
+            if (user.firstName != null)
+                infoParts.add(user.firstName)
+            currentState = Info.SECOND_NAME
+        }
 
-            Info.FIRST_NAME -> {
-                if (user.firstName != null)
-                    infoParts.add(user.firstName)
-                currentState = Info.SECOND_NAME
-            }
+        Info.SECOND_NAME -> {
+            val hasLastName = user.lastName != null
+            if (hasLastName)
+                infoParts.add(user.lastName)
 
-            Info.SECOND_NAME -> {
-                val hasLastName = user.lastName != null
-                if (hasLastName)
-                    infoParts.add(user.lastName)
+            currentState = if (hasLastName) Info.END else Info.ID
+        }
 
-                currentState = if (hasLastName) Info.END else Info.ID
-            }
+        Info.ID -> {
+            infoParts.add(user.id.toString())
+            currentState = Info.END
+        }
 
-            Info.ID -> {
-                infoParts.add(user.id.toString())
-                currentState = Info.END
-            }
-
-            Info.END -> {
-                if (withTitle && customTitle != null) infoParts.add(customTitle)
-                break
-            }
+        Info.END -> {
+            if (withTitle && customTitle != null) infoParts.add(customTitle)
+            break
         }
     }
 
@@ -78,8 +75,8 @@ fun ChatStorage.getMemberIds(chatId: Long): List<Int> {
 fun getAdminIds(chatId: Long): List<Int> {
     val result = mutableListOf<Int>()
     for (
-        chatMember in
-        Main.getBot().execute(GetChatAdministrators().setChatId(chatId))
+    chatMember in
+    Main.getBot().execute(GetChatAdministrators().setChatId(chatId))
     ) {
         result.add(chatMember.user.id)
     }

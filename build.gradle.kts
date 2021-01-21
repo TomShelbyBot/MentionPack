@@ -5,8 +5,8 @@ plugins {
     maven
 }
 
-group = "me.theseems.tomshelby"
-version = "0.1D"
+group = "me.theseems.tomshelby.mentionpack"
+version = "0.2D"
 
 repositories {
     mavenCentral()
@@ -28,9 +28,8 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 tasks.withType<Jar> {
-    // Otherwise you'll get a "No main manifest attribute" error
     manifest {
-        attributes["Main-Class"] = "com.example.MainKt"
+        attributes["Main-Class"] = "me.theseems.tomshelby.mentionpack"
     }
 
     // To add all of the dependencies

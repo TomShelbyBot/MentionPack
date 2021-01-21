@@ -16,3 +16,18 @@ fun getOrCreateContainer(bot: ThomasBot, chatId: Long, key: String): TomMeta {
 
     return container
 }
+
+fun TomMeta.getContainerByPath(path: List<String>): TomMeta? {
+    var result = this
+    for (part in path) {
+        val nextPartOptional = result.getContainer(part)
+        if (!nextPartOptional.isPresent)
+            return null
+
+        result = nextPartOptional.get()
+    }
+
+    return result
+}
+
+fun TomMeta.getContainerByPath(path: String): TomMeta? = getContainerByPath(path.split("."))

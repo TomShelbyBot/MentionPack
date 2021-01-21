@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 class DeleteGroupBotCommand :
     SimpleBotCommand(
         SimpleCommandMeta
-            .onLabel("mdel")
+            .onLabel("mgdel")
             .description("Удалить группу упоминаний")
     ) {
     override fun handle(bot: ThomasBot, args: Array<out String>, update: Update) {
