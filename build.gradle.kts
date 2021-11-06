@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "me.theseems.tomshelby.mentionpack"
-version = "0.2D"
+version = "0.3D"
 
 repositories {
     mavenCentral()

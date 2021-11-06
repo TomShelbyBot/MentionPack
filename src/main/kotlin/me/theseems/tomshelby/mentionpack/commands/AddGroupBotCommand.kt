@@ -11,9 +11,7 @@ class AddGroupBotCommand : AdminPermissibleBotCommand,
     SimpleBotCommand(
         SimpleCommandMeta
             .onLabel("mgadd")
-            .description("Создать группу (или добавить человека туда)")
-    ) {
-
+            .description("Create group and/or add member")) {
     override fun handle(bot: ThomasBot, args: Array<out String>, update: Update) {
         if (args.size < 2) {
             bot.replyBackText(update, "Укажите название группы и ник человека")
@@ -25,6 +23,11 @@ class AddGroupBotCommand : AdminPermissibleBotCommand,
         val failed: MutableSet<String> = HashSet()
         val success: MutableSet<Int> = HashSet()
 
+        update.message.entities
+            .filter { it.user != null }
+            .map { it.user.id }
+            .forEach(success::add)
+
         for (rawUsername in args.drop(1)) {
             val username =
                 if (rawUsername.startsWith('@')) {
@@ -33,11 +36,11 @@ class AddGroupBotCommand : AdminPermissibleBotCommand,
                     rawUsername
                 }
 
-            val lookup = bot.chatStorage.lookupMember(chatId, username)
-            if (!lookup.isPresent) {
-                failed.add(username)
+            val lookUp = bot.chatStorage.lookupMember(chatId, username);
+            if (lookUp.isPresent) {
+                success.add(lookUp.get().user.id)
             } else {
-                success.add(lookup.get().user.id)
+                failed.add(username)
             }
         }
 
@@ -46,16 +49,14 @@ class AddGroupBotCommand : AdminPermissibleBotCommand,
             if (!groups.getIntegerArray(groupName).isPresent) {
                 groups.set(groupName, success.toIntArray())
             } else {
-                val array = groups.getIntegerArray(groupName).get()
-                success.addAll(array)
-
+                success.addAll(groups.getIntegerArray(groupName).get())
                 groups.set(groupName, success)
             }
         }
 
-        var result = "Теперь в группе $groupName участников: ${success.size}"
+        var result = "Mention group $groupName currently has: ${success.size} member(s)"
         if (failed.isNotEmpty()) {
-            result += "\n" + "Следующие участники не были добавлены: " + failed.joinToString(", ")
+            result += "\n" + "Members haven't been found: " + failed.joinToString(", ")
         }
 
         bot.replyBackText(update, result)

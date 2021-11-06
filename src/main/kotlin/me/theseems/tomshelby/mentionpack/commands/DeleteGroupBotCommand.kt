@@ -10,20 +10,20 @@ class DeleteGroupBotCommand :
     SimpleBotCommand(
         SimpleCommandMeta
             .onLabel("mgdel")
-            .description("Удалить группу упоминаний")
+            .description("Delete mention group")
     ) {
     override fun handle(bot: ThomasBot, args: Array<out String>, update: Update) {
         if (args.isEmpty()) {
-            bot.replyBackText(update, "Укажите группу")
+            bot.replyBackText(update, "Please, enter in a group name")
             return
         }
 
         bot.chatStorage.requireGroup(update.message.chatId, args.first())
-        bot.chatStorage.getChatMeta(update.message.chatId)
-            .getContainer("mentionGroups").ifPresent { container ->
-                container.remove(args.first())
-            }
+        bot.chatStorage
+            .getChatMeta(update.message.chatId)
+            .getContainer("mentionGroups")
+            .ifPresent { container -> container.remove(args.first()) }
 
-        bot.replyBackText(update, "ОК")
+        bot.replyBackText(update, "OK")
     }
 }

@@ -1,7 +1,7 @@
 {
   "name": "mentionpack",
   "author": "@theseems",
-  "description": "Packs that allows to mention certain groups (roles etc.) in the chat",
-  "version": "0.2D",
+  "description": "Packs that allows to mention certain groups (roles etc.) in the chat\n\nhttps://github.com/TomShelbyBot/MentionPack",
+  "version": "0.3D",
   "main": "me.theseems.tomshelby.mentionpack.MentionBotPackage"
 }

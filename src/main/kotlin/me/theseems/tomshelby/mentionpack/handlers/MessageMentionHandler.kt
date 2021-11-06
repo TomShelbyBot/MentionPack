@@ -17,12 +17,9 @@ class MessageMentionHandler : UpdateHandler {
         val mentionCandidate = split[0].drop(1)
         if (mentionCandidate.isEmpty()) return true
 
-        val group = bot.chatStorage.getGroup(update.message.chatId, mentionCandidate)
-        sendNotification(
-            bot, update,
-            group ?: return true,
-            split.drop(1).joinToString(" ")
-        )
+        val group = bot.chatStorage.getGroup(update.message.chatId, mentionCandidate) ?: return true
+        sendNotification(bot, update, group, split.drop(1).joinToString(" "))
+
         return false
     }
 

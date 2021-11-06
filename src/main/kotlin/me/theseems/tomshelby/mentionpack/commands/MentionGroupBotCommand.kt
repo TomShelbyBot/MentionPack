@@ -12,16 +12,14 @@ class MentionGroupBotCommand :
     SimpleBotCommand(
         SimpleCommandMeta
             .onLabel("mgat")
-            .description("Упомянуть группу из чата")
-    ) {
-
+            .description("Notify mention group")) {
     override fun handle(bot: ThomasBot, rawArgs: Array<out String>, update: Update) {
         val filterArray = rawArgs.filter { arg -> arg != "-Delete" }
         val deleteMessage = filterArray.size != rawArgs.size
         val args = filterArray.toTypedArray()
 
         if (args.isEmpty()) {
-            bot.replyBackText(update, "Укажите группу, которую нужно пингануть")
+            bot.replyBackText(update, "Please, enter in a group name")
             return
         }
 
@@ -32,8 +30,7 @@ class MentionGroupBotCommand :
             bot.execute(
                 DeleteMessage()
                     .setChatId(chatId)
-                    .setMessageId(messageId)
-            )
+                    .setMessageId(messageId))
         }
 
         sendNotification(

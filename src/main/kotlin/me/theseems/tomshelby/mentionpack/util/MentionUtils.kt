@@ -61,25 +61,11 @@ fun ChatMember.stringInfo(withTitle: Boolean = false): String {
     return infoParts.joinToString(" ")
 }
 
-fun ChatStorage.getMemberIds(chatId: Long): List<Int> {
-    val result = mutableListOf<Int>()
-    getResolvableUsernames(chatId).map { nickname ->
-        lookupMember(chatId, nickname).ifPresent { member ->
-            result.add(member.user.id)
-        }
-    }
+fun ChatStorage.getMemberIds(chatId: Long): List<Int> = getResolvableUsernames(chatId)
+    .map { username -> lookupMember(chatId, username) }
+    .filter { value -> value.isPresent }
+    .map { value -> value.get().user.id }
 
-    return result
-}
-
-fun getAdminIds(chatId: Long): List<Int> {
-    val result = mutableListOf<Int>()
-    for (
-    chatMember in
-    Main.getBot().execute(GetChatAdministrators().setChatId(chatId))
-    ) {
-        result.add(chatMember.user.id)
-    }
-
-    return result
-}
+fun getAdminIds(chatId: Long): List<Int> = Main.getBot()
+    .execute(GetChatAdministrators().setChatId(chatId))
+    .map { entry -> entry.user.id }
