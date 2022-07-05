@@ -19,16 +19,16 @@ class RemoveGroupBotCommand : SimpleBotCommand(
             return
         }
 
-        val chatMeta = bot.chatStorage.getChatMeta(update.message.chatId).getContainer("mentionGroups")
+        val chatMeta = bot.chatStorage.getChatMeta(update.message.chatId.toString()).getContainer("mentionGroups")
             .orElseThrow { throw CommandUtils.BotCommandException("Не могу найти группу упоминаний") }
-        val groupList = chatMeta.getIntegerArray(args[0])
+        val groupList = chatMeta.getLongArray(args[0])
             .orElseThrow { throw CommandUtils.BotCommandException("Не могу найти группу упоминаний") }
 
-        val successIds: MutableSet<Int> = HashSet()
+        val successIds: MutableSet<Long> = HashSet()
         val fails = mutableListOf<Pair<String, String>>()
 
         for (username in args.drop(1)) {
-            val memberId = bot.chatStorage.lookup(update.message.chatId, username)
+            val memberId = bot.chatStorage.lookup(update.message.chatId.toString(), username)
             if (!memberId.isPresent) {
                 fails += username to "Участник не был найден"
             } else if (!groupList.contains(memberId.get())) {
@@ -51,7 +51,7 @@ class RemoveGroupBotCommand : SimpleBotCommand(
         }
 
         if (successIds.isNotEmpty()) {
-            val alternate = mutableListOf<Int>(*groupList)
+            val alternate = mutableListOf<Long>(*groupList)
             alternate.removeAll(successIds)
 
             if (alternate.isEmpty()) {

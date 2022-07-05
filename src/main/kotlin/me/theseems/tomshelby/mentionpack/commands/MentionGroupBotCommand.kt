@@ -29,11 +29,11 @@ class MentionGroupBotCommand :
         val messageId = update.message.messageId
 
         if (deleteMessage) {
-            bot.execute(
-                DeleteMessage()
-                    .setChatId(chatId)
-                    .setMessageId(messageId)
-            )
+            val deleteMessageRequest = DeleteMessage()
+            deleteMessageRequest.chatId = chatId.toString()
+            deleteMessageRequest.messageId = messageId
+
+            bot.execute(deleteMessageRequest)
         }
 
         sendNotification(

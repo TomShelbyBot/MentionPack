@@ -3,13 +3,14 @@ package me.theseems.tomshelby.mentionpack.util
 import me.theseems.tomshelby.Main
 import me.theseems.tomshelby.storage.ChatStorage
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatAdministrators
-import org.telegram.telegrambots.meta.api.objects.ChatMember
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberAdministrator
 
-fun makeInvisibleMention(userId: Int): String {
+fun makeInvisibleMention(userId: Long): String {
     return "[­](tg://user?id=$userId)"
 }
 
-fun makeMention(userId: Int, title: String? = null): String =
+fun makeMention(userId: Long, title: String? = null): String =
     if (title == null) {
         makeInvisibleMention(userId)
     } else {
@@ -34,8 +35,7 @@ fun ChatMember.stringInfo(withTitle: Boolean = false): String {
         }
 
         Info.FIRST_NAME -> {
-            if (user.firstName != null)
-                infoParts.add(user.firstName)
+            infoParts.add(user.firstName)
             currentState = Info.SECOND_NAME
         }
 
@@ -53,7 +53,10 @@ fun ChatMember.stringInfo(withTitle: Boolean = false): String {
         }
 
         Info.END -> {
-            if (withTitle && customTitle != null) infoParts.add(customTitle)
+            if (withTitle && this is ChatMemberAdministrator) {
+                infoParts.add(customTitle)
+            }
+
             break
         }
     }
@@ -61,10 +64,10 @@ fun ChatMember.stringInfo(withTitle: Boolean = false): String {
     return infoParts.joinToString(" ")
 }
 
-fun ChatStorage.getMemberIds(chatId: Long): List<Int> {
-    val result = mutableListOf<Int>()
-    getResolvableUsernames(chatId).map { nickname ->
-        lookupMember(chatId, nickname).ifPresent { member ->
+fun ChatStorage.getMemberIds(chatId: Long): List<Long> {
+    val result = mutableListOf<Long>()
+    getResolvableUsernames(chatId.toString()).map { nickname ->
+        lookupMember(chatId.toString(), nickname).ifPresent { member ->
             result.add(member.user.id)
         }
     }
@@ -72,12 +75,15 @@ fun ChatStorage.getMemberIds(chatId: Long): List<Int> {
     return result
 }
 
-fun getAdminIds(chatId: Long): List<Int> {
-    val result = mutableListOf<Int>()
-    for (
-    chatMember in
-    Main.getBot().execute(GetChatAdministrators().setChatId(chatId))
-    ) {
+fun getAdminIds(chatId: Long): List<Long> {
+    val result = mutableListOf<Long>()
+
+    val getChatMemberAdministrators = GetChatAdministrators()
+    getChatMemberAdministrators.chatId = chatId.toString()
+
+    val administrators = Main.getBot().execute(getChatMemberAdministrators)
+
+    for (chatMember in administrators) {
         result.add(chatMember.user.id)
     }
 

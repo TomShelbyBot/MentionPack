@@ -1,6 +1,6 @@
 package me.theseems.tomshelby.mentionpack.util
 
-import org.telegram.telegrambots.meta.api.objects.ChatMember
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember
 import kotlin.math.abs
 import kotlin.math.min
 

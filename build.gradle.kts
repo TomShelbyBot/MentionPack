@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "me.theseems.tomshelby.mentionpack"
-version = "0.2D"
+version = "0.3D"
 
 repositories {
     mavenCentral()
@@ -17,7 +17,7 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
-    implementation("com.github.TomShelbyBot:TomShelbyBot:0.8D")
+    implementation("com.github.TomShelbyBot:TomShelbyBot:0.10D-SNAPSHOT")
 }
 
 tasks.test {

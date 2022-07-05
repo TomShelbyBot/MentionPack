@@ -5,7 +5,7 @@ import me.theseems.tomshelby.storage.SimpleTomMeta
 import me.theseems.tomshelby.storage.TomMeta
 
 fun getOrCreateContainer(bot: ThomasBot, chatId: Long, key: String): TomMeta {
-    val chatMeta = bot.chatStorage.getChatMeta(chatId)
+    val chatMeta = bot.chatStorage.getChatMeta(chatId.toString())
     val containerOptional = chatMeta.getContainer(key)
     if (containerOptional.isPresent)
         return containerOptional.get()

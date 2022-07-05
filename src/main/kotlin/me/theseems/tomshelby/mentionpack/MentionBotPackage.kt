@@ -1,6 +1,10 @@
 package me.theseems.tomshelby.mentionpack
 
-import me.theseems.tomshelby.mentionpack.commands.*
+import me.theseems.tomshelby.mentionpack.commands.AddGroupBotCommand
+import me.theseems.tomshelby.mentionpack.commands.DeleteGroupBotCommand
+import me.theseems.tomshelby.mentionpack.commands.ListGroupBotCommand
+import me.theseems.tomshelby.mentionpack.commands.MentionGroupBotCommand
+import me.theseems.tomshelby.mentionpack.commands.RemoveGroupBotCommand
 import me.theseems.tomshelby.mentionpack.handlers.MessageMentionHandler
 import me.theseems.tomshelby.pack.JavaBotPackage
 

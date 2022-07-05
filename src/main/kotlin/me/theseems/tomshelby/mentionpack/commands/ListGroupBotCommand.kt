@@ -24,7 +24,11 @@ class ListGroupBotCommand : SimpleBotCommand(
         val group = bot.chatStorage.requireGroup(update.message.chatId, args.first())
         val builder = StringBuilder()
         group.forEach { id ->
-            val chatMember = bot.execute(GetChatMember().setChatId(update.message.chatId).setUserId(id))
+            val getChatMember = GetChatMember()
+            getChatMember.chatId = update.message.chatId.toString()
+            getChatMember.userId = id
+
+            val chatMember = bot.execute(getChatMember)
             val info = chatMember.stringInfo()
             builder.append("${chatMember.emojis()} $info").append('\n')
         }

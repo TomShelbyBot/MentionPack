@@ -23,7 +23,7 @@ class AddGroupBotCommand : AdminPermissibleBotCommand,
         val chatId = update.message.chatId
         val groupName = args[0]
         val failed: MutableSet<String> = HashSet()
-        val success: MutableSet<Int> = HashSet()
+        val success: MutableSet<Long> = HashSet()
 
         for (rawUsername in args.drop(1)) {
             val username =
@@ -33,7 +33,7 @@ class AddGroupBotCommand : AdminPermissibleBotCommand,
                     rawUsername
                 }
 
-            val lookup = bot.chatStorage.lookupMember(chatId, username)
+            val lookup = bot.chatStorage.lookupMember(chatId.toString(), username)
             if (!lookup.isPresent) {
                 failed.add(username)
             } else {
@@ -43,10 +43,10 @@ class AddGroupBotCommand : AdminPermissibleBotCommand,
 
         if (success.isNotEmpty()) {
             val groups = getOrCreateContainer(bot, chatId, "mentionGroups")
-            if (!groups.getIntegerArray(groupName).isPresent) {
-                groups.set(groupName, success.toIntArray())
+            if (!groups.getLongArray(groupName).isPresent) {
+                groups.set(groupName, success.toLongArray())
             } else {
-                val array = groups.getIntegerArray(groupName).get()
+                val array = groups.getLongArray(groupName).get()
                 success.addAll(array)
 
                 groups.set(groupName, success)
