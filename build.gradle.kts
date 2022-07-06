@@ -15,8 +15,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test-junit5"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
     implementation("com.github.TomShelbyBot:TomShelbyBot:0.10D")
 }
 
@@ -32,11 +32,10 @@ tasks.withType<Jar> {
         attributes["Main-Class"] = "me.theseems.tomshelby.mentionpack"
     }
 
-    // To add all of the dependencies
-    from(sourceSets.main.get().output)
+    val include = setOf("kotlin-stdlib-1.4.21.jar")
 
-    dependsOn(configurations.runtimeClasspath)
-    from({
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-    })
+    configurations.runtimeClasspath.get()
+        .filter { it.name in include }
+        .map { zipTree(it) }
+        .also { from(it) }
 }
