@@ -17,7 +17,7 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
-    implementation("com.github.TomShelbyBot:TomShelbyBot:0.10D-SNAPSHOT")
+    implementation("com.github.TomShelbyBot:TomShelbyBot:0.10D")
 }
 
 tasks.test {
