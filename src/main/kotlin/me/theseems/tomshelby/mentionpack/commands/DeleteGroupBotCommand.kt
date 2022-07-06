@@ -19,7 +19,7 @@ class DeleteGroupBotCommand :
         }
 
         bot.chatStorage.requireGroup(update.message.chatId, args.first())
-        bot.chatStorage.getChatMeta(update.message.chatId)
+        bot.chatStorage.getChatMeta(update.message.chatId.toString())
             .getContainer("mentionGroups").ifPresent { container ->
                 container.remove(args.first())
             }
